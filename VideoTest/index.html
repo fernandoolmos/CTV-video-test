@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Enjoy Video Player test app</title>
+<link rel="stylesheet" href="css/style.css" type="text/css">
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="js/mediaPlayHandle.js"></script>
+<script src="js/MediaPlayer.js"></script>
+<script src="js/mouseEvent.js"></script>
+<style type="text/css">
+
+
+.default_font { font-style:bold; font-size:15pt; color: black; }
+.inner_table_font { font-style:bold; font-size:13pt; color: black; }
+
+.VideosPopup {
+	position:absolute;
+	top:200px;
+	left:400px;
+	height: 300px;
+	width: 500px;
+	margin:auto;
+	background-color:blue;
+	color:white;
+	border:solid;
+	border-color:white;
+	z-index:100;
+	visibility:visible;
+}
+
+.VideosListElement {
+	margin-top: 10px;
+	margin-left: 20px;
+}
+
+.VideosCerrar {
+	margin-left: 440px;
+	margin-top: 10px;
+	position: relative;
+}
+
+
+</style>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+
+var VK_ENTER					=  13;
+var VK_PAUSE					=  19;
+var VK_PAGE_UP					=  33;
+var VK_PAGE_DOWN				=  34;
+var VK_LEFT						=  37;
+var VK_UP						=  38;
+var VK_RIGHT					=  39;
+var VK_DOWN						=  40;
+var VK_0						=  48;
+var VK_1						=  49;
+var VK_2						=  50;
+var VK_3						=  51;
+var VK_4						=  52;
+var VK_5						=  53;
+var VK_6						=  54;
+var VK_7						=  55;
+var VK_8						=  56;
+var VK_9						=  57;
+var VK_RED						= 403;
+var VK_GREEN					= 404;
+var VK_YELLOW					= 405;
+var VK_BLUE						= 406;
+var VK_REWIND					= 412;
+var VK_STOP						= 413;
+var VK_PLAY						= 415;
+var VK_FAST_FWD					= 417;
+var VK_INFO						= 457;
+var VK_BACK						= 461;
+
+var keyHistory = new Array();
+
+</script>
+
+</head>
+
+<body onload="init();" onkeydown="processKeyDown(event)">
+	<div class="header" id="header">
+		<div class="logo title_text" id="title">
+			Enjoy LG video monitor test
+		</div>
+		<div class="logo logo_movistar"></div>
+
+	</div>
+	<div class="body_container">
+		<div class="left_container">
+			<div class="tv_player_title">Movie Player</div>
+			<div id="tv_player_container" class="tv_player_container">
+				<div id="tv_player_noise" class="tv_player_noise"></div>
+			</div>
+			<div class="tv_player_selection_area">
+				<div id="tv_player_selection_content_overlap"
+				onclick="hide(this);"
+				class="tv_player_selection_content_overlap">
+					PUSH ENTER<br> TO START
+				</div>
+				<div id="tv_player_selection_content" class="tv_player_selection_content">
+					<div id ="tv_player_selection_content_option"
+						class="tv_player_selection_content_option">
+						<div 	id="tv_player_selection_1" onmouseover="focushover(this);"
+								onmouseout="unfocus(this);" onclick="select(this);" class="list_selection tv_player_selection_1">1. Play video</div>
+						<div 	id="tv_player_selection_2" onmouseover="focushover(this);"
+								onmouseout="unfocus(this);" onclick="select(this);" class="list_selection tv_player_selection_2">2. Select video</div>
+						<div 	id="tv_player_selection_3" onmouseover="focushover(this);"
+								onmouseout="unfocus(this);" onclick="select(this);" class="list_selection tv_player_selection_3">3. Set Widevine url</div>
+						<div 	id="tv_player_selection_4" onmouseover="focushover(this);"
+								onmouseout="unfocus(this);" onclick="select(this);" class="list_selection tv_player_selection_4">4. GetToken</div>
+					</div>
+					<div id="tv_player_selection_content_url"
+						class="tv_player_selection_content_url">
+						<div 	id="tv_player_selection_url_1" onmouseover="focushover(this);"
+								onmouseout="unfocus(this);" onclick="setUrl(this);" class="list_selection tv_player_selection_1"></div>
+						<div 	id="tv_player_selection_url_2" onmouseover="focushover(this);"
+								onmouseout="unfocus(this);" onclick="setUrl(this);" class="list_selection tv_player_selection_2"></div>
+						<div 	id="tv_player_selection_url_3" onmouseover="focushover(this);"
+								onmouseout="unfocus(this);" onclick="setUrl(this);" class="list_selection tv_player_selection_3"></div>
+						<div 	id="tv_player_selection_url_4" onmouseover="focushover(this);"
+								onmouseout="unfocus(this);" onclick="setUrl(this);" class="list_selection tv_player_selection_4"></div>
+					</div>
+				</div>
+			</div>
+			<fieldset class="tv_player_setup">
+    			<legend style="color:white; margin-left:135px; padding:5px;"><b>PLAYER CURRENT SETUP</b></legend>
+				<div id="video_url_option" class="tv_player_video_url_option">url: <a id="video_url_text"></a></div>
+				<div id ="widevine_url_option" class="tv_player_widevine_url_option">widevine: <a id="widevine_url_text"></a></div>
+			</fieldset>
+		</div>
+		<div class="right_container">
+			<div class="log_title">Events logs</div>
+			<div class="log_container">
+				<div id="log_text" class="log_text">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="wheelPopup" class="WheelPopup"></div>
+</body>
+</html>
