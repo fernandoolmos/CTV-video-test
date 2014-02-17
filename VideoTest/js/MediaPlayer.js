@@ -120,13 +120,13 @@ function onBuffering(bIsBufferingStarted) {
 	log("PLAYER:Widevine ## Setting: " + widevineUrl_selected);
 //	media.setWidevineUserData("TOKEN")
 //	log("PLAYER:Widevine ## Sending token con contenido TOKEN");
-	log("PLAYER:Widevine ## Token content = "+ token);
+//	log("PLAYER:Widevine ## Token content = "+ token);
 	if (token != null){
 		log("PLAYER:Widevine ## Sending token with content: " + token);
 		media.setWidevineUserData(token);
 	}
-	media.setWidevinePortalID("telefonica");
-	media.setWidevineStoreFront("telefonica");
+	media.setWidevinePortalID("Telefonica");
+	media.setWidevineStoreFront("Telefonica");
 	log("PLAYER:OnBuffering ## setting widevine : " + widevineUrl_selected);
 
 	
@@ -152,11 +152,13 @@ function log(message){
 	}
 	log_text_container.innerHTML = pre + message + "<br>" + log_text_container.innerHTML;
 
+/* Activate for send logs to a remote device
 	jQuery.ajax({
 		type: "POST",
 		url: 'http://10.95.232.41:8082/Log/indexLocal.php',
 		data: "title= LG:EVENT: " + message
 	});
+*/
 }
 
 function resetLog(){
